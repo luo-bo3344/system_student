@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN"  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>luobo</title>
+<link rel="stylesheet" href="../static/login/css/index.css" />
+	<script type="text/javascript" src="../static/login/js/jquery-3.3.1.js" th:src="@{../static/login/js/jquery-3.3.1.js}"></script>
+</head>
+
+<body>
+<img src="../static/login/img/plan.jpg" class="bgImg"/>
+<div class="content">
+	<div class="bidTitle">学生信息管理系统</div>
+	<form>
+	<div class="line" style="color: #ff0000;height: 20px" >
+		<span text="${message}"></span>
+	</div>
+	<div class="logCon">
+		<div class="line"><span>账号:</span>
+		<input class="bt_input" id="name" type="text" placeholder="请输入账号" />
+			<div><spqn id="userinfo"></spqn></div>
+		</div>
+		<div class="line"><span>密码:</span>
+		<input class="bt_input" id="password" type="text" placeholder="请输入密码" />
+			<div><spqn id="pwd"></spqn></div>
+		</div>
+		<div class="line">
+			<input type="checkbox"><span>管理员</span>
+			<input type="checkbox"><span>教师</span>
+			<input type="checkbox" checked><span>学生</span>
+		</div>
+		<button type="button" class="logingBut" onclick="login()">登录</button>
+	</div>
+	</form>
+</div>
+</body>
+<script type="text/javascript">
+	//将文本输入的值发送给服务器，接受服务器返回的值
+	function login() {
+		var name1=$("#name").val();
+		var password1=$("#password").val();
+		if (name1==""){
+			alert("账号不能为空");
+			return false;
+		}else if(password1=="") {
+			alert("密码不能为空");
+			return false;
+		}
+		$.ajax({
+			url: "loginuser",
+			data:{"name":name1,
+				  "password":password1},
+			type:"post",
+			success:function (data) {
+				console.log(data)
+				/*if (data==null){
+					alert("该用户不存在")
+				}else {
+					window.location.href="haha"
+				}*/
+			}
+
+		});
+	}
+	/*function a1(){
+		var name1=$("#name").val();
+		console.log(name1)
+		$.ajax({
+			url: "user/login",
+			data:{"name":$("#name").val()},
+			type:"post",
+			success:function a(data) {
+				console.log(data);
+				if (data.toString()=='200'){
+					$('#userinfo').css("color","white")
+				}else {
+					$('#userinfo').css("color","red")
+				}
+				$("#userinfo").html(data);
+			}
+		});
+	}*/
+
+	/*function a2() {
+		$.ajax({
+			url: "user/login",
+			data:{"password":$("#password").val()},
+			type:"post",
+			success:function a(data) {
+				console.log(data+"haha");
+				if (data.toString()=='200'){
+					$('#pwd').css("color","white")
+				}else {
+					$('#pwd').css("color","red")
+				}
+				$("#pwd").html(data);
+			}
+		});*/
+</script>
+
+</html>

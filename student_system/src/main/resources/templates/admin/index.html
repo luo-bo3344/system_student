@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>首页 - 学生信息管理系统</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
+	<meta name="description" content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
+	<meta name="author" content="yinqi">
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}" rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css" th:href="@{~/static/css/materialdesignicons.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="lyear-layout-web">
+	<div class="lyear-layout-container">
+		<!--左侧导航栏和头部信息-->
+		<div th:replace="common/commons :: commonMenu(0)">
+		</div>
+		<!--页面主要内容-->
+		<main class="lyear-layout-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-6 col-lg-3">
+						<div class="card bg-primary">
+							<div class="card-body clearfix">
+								<div class="pull-right">
+									<p class="h6 text-white m-t-0">教师总人数</p>
+									<p class="h3 text-white m-b-0" th:text="${teacherNumbers}">102,125.00</p>
+								</div>
+								<div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i
+										class="mdi mdi-account fa-1-5x"></i></span></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-6 col-lg-3">
+						<div class="card bg-danger">
+							<div class="card-body clearfix">
+								<div class="pull-right">
+									<p class="h6 text-white m-t-0">学生总人数</p>
+									<p class="h3 text-white m-b-0" th:text="${studentNumbers}">520</p>
+								</div>
+								<div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i
+										class="mdi mdi-account-multiple fa-1-5x"></i></span></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-6 col-lg-3">
+						<div class="card bg-success">
+							<div class="card-body clearfix">
+								<div class="pull-right">
+									<p class="h6 text-white m-t-0">班级总数</p>
+									<p class="h3 text-white m-b-0" th:text="${classNumbers}">34,005,000</p>
+								</div>
+								<div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i
+										class="mdi mdi-language-go fa-1-5x"></i></span></div>
+							</div>
+						</div>
+					</div>
+
+					<!--<div class="col-sm-6 col-lg-3">
+						<div class="card bg-purple">
+							<div class="card-body clearfix">
+								<div class="pull-right">
+									<p class="h6 text-white m-t-0">新增留言</p>
+									<p class="h3 text-white m-b-0">153 条</p>
+								</div>
+								<div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i
+										class="mdi mdi-comment-outline fa-1-5x"></i></span></div>
+							</div>
+						</div>
+					</div>-->
+				</div>
+
+				<div class="row">
+
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-header">
+								<h4>班级情况</h4>
+							</div>
+							<div class="card-body">
+								<canvas class="js-chartjs-bars"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-header"><h4 style="color: black">学生男女比例</h4></div>
+							<div class="card-body">
+								<center>
+									<canvas class="chart-pie" id="chart-pie" width="280" height="325"></canvas>
+								</center>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="row">
+
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>教师信息</h4>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table table-hover">
+										<thead>
+										<tr>
+											<th>编号</th>
+											<th>用户名</th>
+											<th>姓名</th>
+											<th>年龄</th>
+											<th>性别</th>
+											<th>家庭住址</th>
+											<th>生日</th>
+											<th>电话</th>
+										</tr>
+										</thead>
+										<tbody id="teacherList">
+										<tr th:each="one ,number: ${teacherAll}">
+											<td th:text="${number.count}"></td>
+											<td th:text="${one.username}"></td>
+											<td th:text="${one.name}"></td>
+											<td th:text="${one.age}"></td>
+											<td th:text="${one.sex}"></td>
+											<td th:text="${one.address}"></td>
+											<td th:text="${#dates.format(one.birthday, 'yyyy-MM-dd')}"></td>
+											<td th:text="${one.phone}"></td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header"><h4>校园元素</h4></div>
+							<div class="card-body">
+								<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+									<ol class="carousel-indicators">
+										<li data-target="#carouselExampleIndicators" data-slide-to="0"
+											class="active"></li>
+										<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+										<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+										<li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+									</ol>
+									<a class="carousel-inner">
+										<div class="item active"><img src="../static/images/img-slide-3.jpg" alt="图片一">
+										</div>
+										<div class="item"><img src="../static/images/img-slide-4.jpg" alt="图片二"></div>
+										<div class="item"><img src="../static/images/gallery/1.jpg" alt="图片三"></div>
+										<div class="item"><img src="../static/images/test6.jpg" alt="图片四"></div>
+										<a class="left carousel-control" href="#carouselExampleIndicators" role="button"
+										   data-slide="prev"><span class="icon-left-open-big icon-prev"
+																   aria-hidden="true"></span><span class="sr-only">Previous</span></a>
+										<a class="right carousel-control" href="#carouselExampleIndicators"
+										   role="button" data-slide="next"><span class="icon-right-open-big icon-next"
+																				 aria-hidden="true"></span><span
+												class="sr-only">Next</span></a>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header"><h4>励志标语</h4></div>
+							<div class="card-body">
+								<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+									<div class="carousel-inner" role="listbox">
+										<div class="item "><img src="../static/images/test2.jpg" alt="图片二"></div>
+										<div class="item active"><img src="../static/images/test3.jpg" alt="图片三"></div>
+										<div class="item "><img src="../static/images/test4.jpg" alt="图片四"></div>
+										<div class="item "><img src="../static/images/test5.jpg" alt="图片五"></div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</main>
+		<!--End 页面主要内容-->
+	</div>
+</div>
+
+<script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{~/static/js/jquery.min.js}"></script>
+<script type="text/javascript" src="../static/js/bootstrap.min.js" th:src="@{~/static/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="../static/js/perfect-scrollbar.min.js"
+		th:src="@{../static/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" src="../static/js/main.min.js" th:src="@{~/static/js/main.min.js}"></script>
+<!--图表插件-->
+<script type="text/javascript" src="../static/js/Chart.js" th:src="@{~/static/js/Chart.js}"></script>
+<script th:inline="javascript">
+
+    $(".lyear-layout-sidebar-scroll li").click(function () {
+        //动态改变li的样式,点击添加样式
+        document.querySelector("")
+        //li标签的内容
+        var title = $(this).text();
+    });
+
+
+    $(document).ready(function (e) {
+        var name = [];
+        var countNumbers = [];
+        var $dashChartBarsCnt = jQuery('.js-chartjs-bars')[0].getContext('2d');
+        $.ajax({
+            url: '/user/echarts',
+            type: "post",
+            success: function (data) {
+                console.log(data);
+                var Data = data;
+                console.log(Data);
+                // 循环遍历Map集合
+                for (var key in Data) {
+                    name.push(key); // key值
+                    countNumbers.push(Data[key]); // value值
+                }
+                console.log(name);
+                console.log(countNumbers);
+                var $dashChartBarsData = {
+                    labels: name,
+                    datasets: [
+                        {
+                            label: '班级人数统计',
+                            borderWidth: 1,
+                            borderColor: 'rgba(19,19,19,0)',
+                            backgroundColor: 'rgba(7,220,197,0.5)',
+                            hoverBackgroundColor: "rgba(24,41,191,0.7)",
+                            hoverBorderColor: "rgba(0,0,0,0)",
+                            data: countNumbers
+                        }
+                    ]
+                };
+                new Chart($dashChartBarsCnt, {
+                    type: 'bar',
+                    data: $dashChartBarsData
+                });
+            }
+        });
+    });
+
+    $(document).ready(function (e) {
+        //饼图
+        var boyOrGirl = [];
+        $.ajax({
+            url: '/user/echartspie',
+            type: "post",
+            success: function (data) {
+                var Data = data;
+                console.log(Data);
+                // 循环遍历Map集合
+                for (var key in Data) {
+                    boyOrGirl.push(Data[key]); // value值
+                }
+                new Chart($("#chart-pie"), {
+                    type: 'pie',
+                    data: {
+                        labels: ["男", "女"],
+                        datasets: [{
+                            data: boyOrGirl,
+                            backgroundColor: ['rgb(47,144,205)', 'rgb(63,210,57)']
+                        }]
+                    },
+                    options: {
+                        responsive: false
+                    }
+                });
+            }
+        })
+    });
+
+</script>
+</body>
+</html>

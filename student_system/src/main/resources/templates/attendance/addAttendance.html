@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>考勤信息添加</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<!--	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+			  rel="stylesheet">-->
+	<!--时间选择插件-->
+	<!--<link rel="stylesheet"
+		  th:href="@{~/static/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}">
+	<link rel="stylesheet"
+		  th:href="@{~/static/js/bootstrap-datepicker/bootstrap-datepicker3.min.css}">-->
+
+	<!--时间选择插件-->
+	<link rel="stylesheet" href="../static/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" th:href="@{~/static/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}">
+	<!--日期选择插件-->
+	<link rel="stylesheet" href="../static/js/bootstrap-datepicker/bootstrap-datepicker3.min.css" th:href="@{~/static/js/bootstrap-datepicker/bootstrap-datepicker3.min.css}">
+	<link th:href="@{~/static/css/style.min.css}" rel="stylesheet">
+</head>
+<body>
+<div class="lyear-layout-web">
+	<div class="lyear-layout-container">
+		<div th:replace="common/commons :: commonMenu(5)">
+		</div>
+		<main class="lyear-layout-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header"><h3>学生考勤信息</h3></div>
+							<div class="card-body">
+								<form name="addStudent" class="form-horizontal" th:action="@{/attendance/addAttendance}"
+									  method="post" onsubmit="return checkAddStudent()">
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="name">学生姓名</label>
+										<div class="col-md-7">
+											<input class="form-control" id="name" type="text" name="name"
+												   list="classNameList" placeholder="请选择学生姓名..">
+											<datalist class="form-control" name="className" id="classNameList"
+													  style="display:none;">
+												<option th:each="name:${studentName}" th:value="${name}"></option>
+											</datalist>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="description">缺勤/迟到原因</label>
+										<div class="col-md-7">
+											<input class="form-control" id="description"
+												   placeholder="请输入原由.." name="description">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="attendanceDate">缺勤/迟到时间</label>
+										<div class="col-md-7">
+											<input class="form-control js-datetimepicker" type="text"
+												   id="attendanceDate" name="attendanceDate" placeholder="请选择具体时间"
+												   value="" data-side-by-side="true" data-locale="zh-cn"
+												   data-format="YYYY-MM-DD"/>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="col-md-9 col-md-offset-3">
+											<button class="btn btn-primary" type="submit">添加缺勤</button>
+											<a class="btn btn-cyan" th:href="@{/attendance/returnToList}">返回考勤列表</a>
+										</div>
+									</div>
+								</form>
+								<span class="alert-danger" th:text="${NotFound}"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{~/static/js/main.min.js}"></script>
+<script type="text/javascript" th:src="@{~/static/js/jquery-3.1.1.js}"></script>
+<!--时间选择插件-->
+<script th:src="@{~/static/js/bootstrap-datetimepicker/moment.min.js}"></script>
+<script th:src="@{~/static/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+<script src="@{~/static/js/bootstrap-datetimepicker/locale/zh-cn.js}"></script>
+<!--日期选择插件-->
+<script th:src="@{~/static/js/bootstrap-datepicker/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{~/static/js/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+<script type="text/javascript" th:src="@{~/static/js/main.min.js}"></script>
+<script th:ononline="javascript">
+    function checkAddStudent() {
+        /*判断用户名是否为空*/
+        var name = document.getElementById("name").value;
+        console.log(name);
+        if (name == null || name == '') {
+            alert("学生名字不能为空,请选择！");
+            return false;
+        }
+        var description = document.getElementById("description").value;
+        console.log(description);
+        if (description == null || description == '') {
+            alert("请输入缺勤原由！");
+            return false;
+        }
+
+        var str = $("#attendanceDate").val();
+        var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
+        var arr = reg.exec(str);
+        if (!reg.test(str) || RegExp.$2 > 12 || RegExp.$3 > 31) {
+            alert("请保证输入的日期格式为2019-01-01类型的正确日期!");
+            return false;
+        }
+    }
+
+</script>
+</html>

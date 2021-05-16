@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>班级信息添加</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+	<!--时间选择插件-->
+	<link rel="stylesheet"
+		  th:href="@{~/static/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}">
+	<link rel="stylesheet"
+		  th:href="@{~/static/js/bootstrap-datepicker/bootstrap-datepicker3.min.css}">
+</head>
+<body>
+<div class="lyear-layout-web">
+	<div class="lyear-layout-container">
+		<div th:replace="common/commons :: commonMenu(3)">
+		</div>
+		<main class="lyear-layout-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header"><h3>添加班级信息</h3></div>
+							<div class="card-body">
+								<form name="addStudent" class="form-horizontal" th:action="@{/stuClass/addStuClass}"
+									  method="post" onsubmit="return checkAddStudent()">
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="className">班级名称</label>
+										<div class="col-md-7">
+											<input class="form-control" id="className"
+												   placeholder="请输入班级名称.." name="className">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="description">班级简介/口号</label>
+										<div class="col-md-7">
+											<input class="form-control"  id="description"
+												   name="description" placeholder="请输入班级简介或口号..">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-9 col-md-offset-3">
+											<button class="btn btn-primary" type="submit">添加新班级</button>
+											<a class="btn bg-primary" th:href="@{/stuClass/returnToList}">返回班级列表</a>
+										</div>
+									</div>
+								</form>
+								<span class="alert-danger" th:text="${addClass}"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{~/static/js/main.min.js}"></script>
+<script type="text/javascript" th:src="@{~/static/js/jquery-3.1.1.js}"></script>
+<script th:ononline="javascript">
+    function checkAddStudent() {
+        /*判断用户名是否为空*/
+        var className = document.getElementById("className").value;
+        console.log(className);
+        if (className == null || className == '') {
+            alert("班级名称不能为空,请输入！");
+            return false;
+        }
+    }
+
+</script>
+</html>

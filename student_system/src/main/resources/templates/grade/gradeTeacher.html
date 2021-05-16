@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>学生-成绩信息管理</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+</head>
+
+<body>
+<div class="lyear-layout-web">
+	<div class="lyear-layout-container">
+		<div th:replace="common/commons :: commonMenu(5)">
+		</div>
+		<main class="lyear-layout-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-toolbar clearfix">
+								<div class="col-lg-3 pull-left">
+										<div class="input-group">
+											<input class="form-control" contenteditable="false" id="courseNameAndClassName" type="text" name="courseNameAndClassName"
+												   list="courseNameList" placeholder="请选择课程...">
+											<datalist class="form-control" name="courseName" id="courseNameList"
+													  style="display:none;">
+												<option th:each="name:${showCourseNameAndClassName}" th:value="${name}"></option>
+											</datalist>
+											<span class="input-group-btn">
+												<button class="btn btn-brown" type="button" id="searchGradeList">搜索</button>
+											</span>
+										</div>
+
+								</div>
+							</div>
+
+							<div class="card-body"id="showCourseGrade"
+								 th:fragment="showCourseGrade">
+
+								<div class="table-responsive">
+									<table class="table table-bordered" >
+										<thead>
+										<tr>
+											<!--<th>
+												<label class="lyear-checkbox checkbox-primary">
+													<input type="checkbox"
+														   id="check-all"><span></span>
+												</label>
+											</th>-->
+											<th>编号</th>
+											<th>学生姓名</th>
+											<th>课程</th>
+											<th>成绩</th>
+											<th>添加时间</th>
+											<th>操作</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr th:each="one ,number: ${gradeVos}">
+											<!--<td>
+												<label class="lyear-checkbox checkbox-primary">
+													<input type="checkbox" name="ids[]"
+														   value="1"><span></span>
+												</label>
+											</td>-->
+											<td th:text="${number.count}"></td>
+											<td style="display:none" th:text="one.id"></td>
+											<td th:text="${one.studentName}"></td>
+											<td  th:text="${one.courseName}"></td>
+											<td th:text="${one.grade}"></td>
+											<td th:text="${#dates.format(one.updateTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+											<td>
+												<a class="btn btn-xs btn-default" href="#!"
+												   th:href="@{'/grade/updateGrade/'+${one.id}}"><i
+														class="mdi mdi-table-edit" style="color: limegreen">编辑</i></a>
+												<a class="btn btn-xs btn-default"
+												   href="javascript:void(0)"
+												   th:onclick="|del(${one.id})|">
+													<i class="mdi mdi-delete" style="color: red">删除</i></a>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+									<span class="alert-warning" th:text="${NotFound}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<!--End 页面主要内容-->
+	</div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"
+		th:src="@{~/static/js/jquery.min.js}"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"
+		th:src="@{~/static/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="js/perfect-scrollbar.min.js"
+		th:src="@{~/static/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" src="js/main.min.js" th:src="@{~/static/js/main.min.js}"></script>
+<script type="text/javascript" th:src="@{~/static/js/jquery-3.1.1.js}"></script>
+<script type="text/javascript">
+    //删除学生信息
+    function del(id) {
+        var sure = confirm("确定删除该生本课程的成绩吗?删除后该生将不会用于该课程的信息！");
+        if (sure) {
+            $.ajax({
+                url: "[[@{/grade/delete/}]]" + id,
+                data: {"id": id},
+                type: "GET",
+                success: function (data) {
+                    console.log(data)
+                    if (data === "删除成功") {
+                        window.location.reload();
+                        alert("删除成功");
+                    }
+                }
+            });
+        }
+    }
+
+    //局部刷新
+    $('#searchGradeList').click(function () {
+        var courseNameAndClassName = $("#courseNameAndClassName").val();
+        console.log("接收的名字"+courseNameAndClassName);
+        $.ajax({
+            url: '/grade/queryGradeList',
+            type: 'get',
+            data: {"courseNameAndClassName": courseNameAndClassName},
+            success: function (data) {
+                $('#showCourseGrade').html(data);
+                console.log("*****" + data);
+            }
+        })
+    })
+    $(function () {
+        $('.search-bar .dropdown-menu a').click(function () {
+            var field = $(this).data('field') || '';
+            $('#search-field').val(field);
+            $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+        });
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>课程信息添加</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+	<!--时间选择插件-->
+	<link rel="stylesheet"
+		  th:href="@{~/static/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}">
+	<link rel="stylesheet"
+		  th:href="@{~/static/js/bootstrap-datepicker/bootstrap-datepicker3.min.css}">
+</head>
+<body>
+<div class="lyear-layout-web">
+	<div class="lyear-layout-container">
+		<div th:replace="common/commons :: commonMenu(4)">
+		</div>
+		<main class="lyear-layout-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header"><h3>课程班级信息</h3></div>
+							<div class="card-body">
+								<form name="addStudent" class="form-horizontal" th:action="@{/course/addCourseInfo}"
+									  method="post" onsubmit="return checkAddStudent()">
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="courseName">课程名称</label>
+										<div class="col-md-7">
+											<input class="form-control" id="courseName"
+												   placeholder="请输入课程名称.." name="courseName">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="className">选择班级</label>
+										<div class="col-md-7">
+											<input class="form-control" id="className" type="text" name="className"
+												   list="classNameList" placeholder="请输入或选择班级名字..">
+											<datalist class="form-control" name="className" id="classNameList"
+													  style="display:none;">
+												<option th:each="name:${className}" th:value="${name}"></option>
+											</datalist>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="teacherId">课程老师</label>
+										<div class="col-md-7">
+											<input class="form-control" id="teacherId" type="text" name="teacherId"
+												   list="itemList" placeholder="请输入或选择老师名字..">
+											<datalist class="form-control" name="teacherId" id="itemList"
+													  style="display:none;">
+												<option th:each="name:${teacherName}" th:value="${name}"
+												></option>
+											</datalist>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="courseDate">上课时间</label>
+										<div class="col-md-7">
+											<input class="form-control" id="courseDate"
+												   placeholder="请输入上课时间.." name="courseDate">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-9 col-md-offset-3">
+											<button class="btn btn-primary" type="submit">添加新课程</button>
+											<a class="btn bg-primary" th:href="@{/course/returnToList}">返回课程列表</a>
+										</div>
+									</div>
+								</form>
+								<span class="alert-danger" th:text="${NotFound}"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{~/static/js/main.min.js}"></script>
+<script type="text/javascript" th:src="@{~/static/js/jquery-3.1.1.js}"></script>
+<script th:ononline="javascript">
+    function checkAddStudent() {
+        /*判断用户名是否为空*/
+        var courseName = document.getElementById("courseName").value;
+        console.log(courseName);
+        if (courseName == null || courseName == '') {
+            alert("课程名字不能为空,请输入！");
+            return false;
+        }
+        var className = document.getElementById("className").value;
+        console.log(className);
+        if (className == null || className == '') {
+            alert("任课教师不能为空,请选择！");
+            return false;
+        }
+
+        var teacherId = document.getElementById("teacherId").value;
+        console.log(teacherId);
+        if (teacherId == null || teacherId == '') {
+            alert("任课教师不能为空,请选择！");
+            return false;
+        }
+
+        var courseDate = document.getElementById("courseDate").value;
+        console.log(courseDate);
+        if (courseDate == null || courseDate == '') {
+            alert("上课时间不能为空");
+            return false;
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>考勤信息管理</title>
+	<link rel="icon" th:href="@{~/static/images/users/logo-ico.png}" type="image/ico">
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+</head>
+
+<body>
+<div class="lyear-layout-web">
+	<div class="lyear-layout-container">
+		<div th:replace="common/commons :: commonMenu(6)">
+		</div>
+		<main class="lyear-layout-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<shiro:hasAnyRoles name="admin,teacher">
+								<div class="card-header">
+									<h3 style="color: #824bf1">查询结果</h3>
+									<a class="btn btn-success pull-right" th:href="@{/attendance/returnToList}">返回考勤信息列表</a>
+								</div>
+							</shiro:hasAnyRoles>
+							<div class="card-body">
+
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+										<tr>
+											<th>编号</th>
+											<th>学生姓名</th>
+											<th>缺勤原因</th>
+											<th>缺勤时间</th>
+											<shiro:hasAnyRoles name="admin,teacher">
+												<th>操作</th>
+											<shiro:hasAnyRoles name="admin,teacher">
+										</tr>
+										</thead>
+										<tbody>
+
+										<tr th:each="one ,number: ${queryAttendance}">
+											<td th:text="${number.count}"></td>
+											<td style="display:none" th:text="one.id"></td>
+											<td th:text="${one.user.name}"></td>
+											<td th:text="${one.description}"></td>
+											<td th:text="${#dates.format(one.attendanceDate, 'yyyy-MM-dd')}"></td>
+											<shiro:hasAnyRoles name="admin,teacher">
+												<td>
+													<a class="btn btn-xs btn-default "
+													   href="javascript:void(0)" th:onclick="|del(${one.id})|">
+														<i class="mdi mdi-delete" style="color: red">删除考勤信息</i></a>
+												</td>
+											</shiro:hasAnyRoles>
+										</tr>
+										</tbody>
+									</table>
+									<span class="alert-danger" th:text="${NotFound}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"
+		th:src="@{~/static/js/jquery.min.js}"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"
+		th:src="@{~/static/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="js/perfect-scrollbar.min.js"
+		th:src="@{~/static/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" src="js/main.min.js" th:src="@{~/static/js/main.min.js}"></script>
+<script type="text/javascript" th:src="@{~/static/js/jquery-3.1.1.js}"></script>
+<script type="text/javascript">
+    //删除考勤信息
+    function del(id) {
+        var sure = confirm("确定删除该生的考勤信息吗?");
+        console.log(id)
+        if (sure) {
+            $.ajax({
+                url: "[[@{/attendance/delete/}]]" + id,
+                data: {"id": id},
+                type: "GET",
+                success: function (data) {
+                    console.log(data)
+                    if (data === "删除成功") {
+                        window.location.reload();
+                        alert("删除成功");
+                    }
+                }
+            });
+        }
+    }
+
+    //局部刷新
+    $('#searchAttendance').click(function () {
+        var className = $("#className").val();
+        $.ajax({
+            url: '/attendance/queryAttendanceByClassName',
+            type: 'post',
+            data: {"className": className},
+            success: function (data) {
+                $('#showAttendance').html(data);
+                console.log("*****" + data);
+            }
+        })
+    })
+
+    $(function () {
+        $('.search-bar .dropdown-menu a').click(function () {
+            var field = $(this).data('field') || '';
+            $('#search-field').val(field);
+            $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+        });
+    });
+
+</script>
+</body>
+</html>

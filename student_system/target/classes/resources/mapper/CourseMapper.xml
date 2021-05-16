@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lb.mapper.CourseMapper">
+
+    <resultMap id="courseAll" type="com.lb.entity.Course">
+        <id column="id" property="id"></id>
+        <result column="course_name" property="courseName"></result>
+        <result column="teacher_id" property="teacherId"></result>
+        <result column="course_date" property="courseDate"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="status" property="status"></result>
+        <association property="user" javaType="com.lb.entity.User">
+            <id column="id" property="id"></id>
+            <result column="name" property="name"></result>
+        </association>
+    </resultMap>
+    <!--查询所有课表-->
+    <select id="queryCourseAll" resultMap="courseAll" resultType="com.lb.entity.Course">
+       SELECT c.id,c.course_name,u.name,c.course_date,c.create_time,c.status
+       from course c LEFT JOIN user u on c.teacher_id=u.id
+       where c.status=1
+	</select>
+
+    <!---->
+    <select id="queryCourseById" resultMap="courseAll" parameterType="java.lang.Integer">
+       SELECT c.id,c.course_name,u.name,c.course_date,c.create_time,c.status
+       from course c LEFT JOIN user u on c.teacher_id=u.id where c.id=#{id}
+    </select>
+    <!--查询班级课表-->
+    <select id="queryClassCourseByClassName" parameterType="java.lang.String" resultMap="courseAll">
+      SELECT c.course_name,u.name,c.course_date FROM course c
+        LEFT JOIN t_class_course cc on c.id=cc.course_id
+        LEFT JOIN student_class sc on sc.id=cc.class_id
+        LEFT JOIN user u on c.teacher_id=u.id
+         where sc.class_name=#{className} and c.`status`=1 and sc.`status`=1
+    </select>
+
+    <!--查询登录的教师拥有的课程-->
+    <select id="queryCourseNameByTeacherName" resultMap="courseAll" parameterType="java.lang.String">
+        SELECT c.course_name from course c
+        LEFT JOIN user u on c.teacher_id=u.id
+        WHERE u.relationship=2 AND u.`status`=1 and u.name=#{name} and c.`status`=1;
+    </select>
+
+    <!--通过课程ID查询课程的名字用于成绩也面的展示-->
+    <select id="queryCourseNameById" parameterType="java.lang.Integer" resultMap="courseAll">
+        SELECT * from course where  `status`=1 and id=#{id}
+    </select>
+
+    <!--查询所有课表-->
+    <select id="queryCourseByCourseName" resultMap="courseAll" resultType="com.lb.entity.Course">
+       SELECT c.id,c.course_name,u.name,c.course_date,c.create_time,c.status
+       from course c LEFT JOIN user u on c.teacher_id=u.id
+       where c.status=1 and c.course_name like CONCAT('%',#{courseName},'%')
+	</select>
+</mapper>

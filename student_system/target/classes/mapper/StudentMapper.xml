@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lb.mapper.StudentMapper">
+    <resultMap id="student" type="com.lb.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+        <result column="birthday" property="birthday"/>
+        <result column="address" property="address"/>
+        <result column="phone" property="phone"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="relationship" property="relationship"/>
+    </resultMap>
+    <!--sql片段-->
+    <sql id="Student_List">
+		id,username,password,name,age,sex,birthday,address,phone,create_time,update_time,status,relationship
+	</sql>
+
+    <!--分页查询操作-->
+    <select id="queryStudentAll" resultMap="student">
+        select
+        <include refid="Student_List"></include>
+        from user where status=1 and relationship=3
+    </select>
+
+    <!--添加学生信息-->
+    <insert id="insertStudent" parameterType="com.lb.entity.Student" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into user(username,password,name,age,sex,birthday,address,phone,create_time,relationship)
+		values(username=#{username},password=#{password},name=#{name},age=#{age},sex=#{sex},birthday=#{birthday},address=#{address},phone=#{phone},create_time=#{createTime},relationship=#{relationship})
+	</insert>
+
+    <select id="queryCountAllStudent" resultType="java.lang.Integer">
+        SELECT count(*) as total FROM user WHERE `status`=1 and relationship=3
+    </select>
+
+    <!--根据ID查询学生姓名用于学生成绩页面展示-->
+    <select id="queryStudentNameById" parameterType="java.lang.Integer" resultMap="student">
+        SELECT * from user where relationship=3 and `status`=1 and id=#{id}
+    </select>
+
+    <!--模糊查询学生信息-->
+    <select id="queryStudentByCondition" resultMap="student" parameterType="java.lang.String">
+        select
+        <include refid="Student_List"></include>
+        from user where status=1 and relationship=3
+        and name like CONCAT('%',#{str},'%')
+    </select>
+</mapper>

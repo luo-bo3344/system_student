@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lb.mapper.CourseAndClassNameVoMapper">
+    <resultMap id="name" type="com.lb.mapper.mappervo.CourseAndClassNameVo">
+        <result column="course_id" property="courseId"></result>
+        <result column="class_id" property="classId"></result>
+    </resultMap>
+
+    <select id="queryIdsByCourseAndClassName1" parameterType="com.lb.mapper.mappervo.CourseAndClassNameVo" resultMap="name">
+       SELECT *from student_class sc INNER JOIN t_class_course tcc on sc.id=tcc.class_id
+      INNER JOIN course c on tcc.course_id=c.id
+      where sc.`status`=1 and c.`status`=1 and c.course_name=#{courseName} and sc.class_name=#{className}
+    </select>
+</mapper>

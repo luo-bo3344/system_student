@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:fragment="head(title)">
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>首页 - 学生信息管理系统</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+</head>
+
+<body>
+<div class="articleLeft" th:fragment="commonMenu(index)">
+	<div class="lyear-layout-web">
+		<div class="lyear-layout-container">
+			<!--左侧导航-->
+			<aside class="lyear-layout-sidebar">
+				<!-- logo -->
+				<div id="logo" class="sidebar-header">
+					<a href=""><img th:src="@{~/static/images/logo-sidebar.png}"
+									title="LightYear"
+									alt="LightYear"/></a>
+				</div>
+				<div class="lyear-layout-sidebar-scroll">
+					<nav class="sidebar-main">
+						<ul class="nav nav-drawer">
+							<shiro:hasAnyRoles name="admin,teacher,student">
+								<li class="nav-item active">
+									<a th:href="@{/user/teacherA11}"
+									   th:class="${index==0} ? 'activeMenu'"><i
+											class="mdi mdi-home"></i>
+										后台首页展示</a>
+									<div class="content1">
+									</div>
+								</li>
+							</shiro:hasAnyRoles>
+
+							<shiro:hasRole name="admin">
+								<li class="nav-item active">
+									<a th:href="@{/teacher/teacherlist}"
+									   th:class="${index==1} ? 'activeMenu'"><i
+											class="mdi mdi-account"></i>
+										教师信息管理</a>
+								</li>
+							</shiro:hasRole>
+
+							<shiro:hasAnyRoles name="admin,teacher">
+								<li class="nav-item active">
+									<a th:href="@{/student/studentList}"
+									   th:class="${index==2} ? 'activeMenu'"><i
+											class="mdi mdi-account-star"></i>
+										学生信息管理</a></li>
+							</shiro:hasAnyRoles>
+
+							<shiro:hasAnyRoles name="admin,teacher">
+								<li class="nav-item active">
+									<a th:href="@{/stuClass/classList}"
+									   th:class="${index==3} ? 'activeMenu'"><i
+											class="mdi mdi-desktop-classic"></i>
+										班级信息管理</a></li>
+							</shiro:hasAnyRoles>
+							<shiro:hasAnyRoles name="student">
+								<li class="nav-item active">
+									<a th:href="@{/stuClass/classList}"
+									   th:class="${index==3} ? 'activeMenu'"><i
+											class="mdi mdi-desktop-classic"></i>
+										班级信息查询</a></li>
+							</shiro:hasAnyRoles>
+
+							<shiro:hasAnyRoles name="admin,teacher">
+								<li class="nav-item active">
+									<a th:href="@{/course/courseList}"
+									   th:class="${index==4} ? 'activeMenu'"><i
+											class="mdi mdi-note-text"></i>
+										学生课程管理</a></li>
+							</shiro:hasAnyRoles>
+							<shiro:hasAnyRoles name="student">
+								<li class="nav-item active">
+									<a th:href="@{/course/courseList}"
+									   th:class="${index==4} ? 'activeMenu'"><i
+											class="mdi mdi-note-text"></i>
+										学生课表查询</a></li>
+							</shiro:hasAnyRoles>
+
+							<shiro:hasAnyRoles name="teacher">
+								<li class="nav-item active">
+									<a th:href="@{/grade/showCourseName}"
+									   th:class="${index==5} ? 'activeMenu'"><i
+											class="mdi mdi-book-open"></i>
+										学生成绩管理</a></li>
+							</shiro:hasAnyRoles>
+
+							<shiro:hasAnyRoles name="student">
+								<li class="nav-item active">
+									<a th:href="@{/grade/showStudentGrade}"
+									   th:class="${index==7} ? 'activeMenu'"><i
+											class="mdi mdi-book-open"></i>
+										学生成绩查询</a></li>
+							</shiro:hasAnyRoles>
+
+							<shiro:hasAnyRoles name="admin,teacher">
+								<li class="nav-item active">
+									<a th:href="@{/attendance/attendanceList}"
+									   th:class="${index==6} ? 'activeMenu'"><i
+											class="mdi mdi-timetable"></i>
+										考勤信息管理</a></li>
+							</shiro:hasAnyRoles>
+							<shiro:hasAnyRoles name="student">
+								<li class="nav-item active">
+									<a th:href="@{/attendance/attendanceList}"
+									   th:class="${index==6} ? 'activeMenu'"><i
+											class="mdi mdi-timetable"></i>
+										考勤信息查询</a></li>
+							</shiro:hasAnyRoles>
+
+						</ul>
+					</nav>
+					<div class="sidebar-footer">
+						<p class="copyright"><h5 style="color: #006cfa">Copyright @罗波 2021毕业设计之学生信息管理系统</h5></p>
+					</div>
+				</div>
+
+			</aside>
+			<!--End 左侧导航-->
+			<!--头部信息-->
+			<header class="lyear-layout-header">
+
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span>
+								<span class="lyear-toggler-bar"></span>
+								<span class="lyear-toggler-bar"></span>
+								<span class="lyear-toggler-bar"></span>
+							</div>
+							<span th:if="${index}==0" class="navbar-page-title"> 学生信息管理系统首页 </span>
+							<span th:if="${index}==1" class="navbar-page-title"> 教师信息管理 </span>
+							<span th:if="${index}==2" class="navbar-page-title"> 学生信息管理 </span>
+							<span th:if="${index}==3" class="navbar-page-title"> 班级信息管理</span>
+							<span th:if="${index}==4" class="navbar-page-title"> 课程信息管理 </span>
+							<span th:if="${index}==5" class="navbar-page-title"> 成绩信息管理</span>
+							<span th:if="${index}==6" class="navbar-page-title"> 学生考勤信息管理 </span>
+							<span th:if="${index}==7" class="navbar-page-title"> 成绩查询 </span>
+							<span th:if="${index}==8" class="navbar-page-title"> 个人信息修改 </span>
+							<span th:if="${index}==9" class="navbar-page-title"> 密码修改 </span>
+
+							<span class="navbar-page-title"
+								  style="color:limegreen;font-family: 'Arial Black'"
+								  th:if="${session.roleName}==1"  th:text="'欢迎'+${session.username}+'管理员登录使用学生信息管理系统'"></span>
+							<span class="navbar-page-title"
+								  style="color:limegreen;font-family: 'Arial Black'"
+								  th:if="${session.roleName}==2" th:text="'欢迎'+${session.username}+'老师登录使用学生信息管理系统'"></span>
+							<span class="navbar-page-title"
+								  style="color:limegreen;font-family: 'Arial Black'"
+								  th:if="${session.roleName}==3" th:text="'欢迎'+${session.username}+'同学登录使用学生信息管理系统'"></span>
+						</div>
+
+						<ul class="topbar-right">
+							<li class="dropdown dropdown-profile">
+								<a href="javascript:void(0)" data-toggle="dropdown">
+									<img class="img-avatar img-avatar-48 m-r-10"
+										 th:src="@{~/static/images/img-slide-4.jpg}" alt="笔下光年"/>
+									<span>系统操作<span class="caret"></span></span>
+								</a>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li><a th:class="${index==8} ? 'activeMenu'" th:href="@{/person/update}">
+										<i class="mdi mdi-account"></i>个人信息</a></li>
+									<li class="divider"></li>
+									<li><a th:class="${index==9} ? 'activeMenu'" th:href="@{/person/toUpdatePassword}"><i
+											class="mdi mdi-key-change"></i>修改密码</a>
+									</li>
+									<li class="divider"></li>
+									<li><a th:href="@{/user/logout}"><i
+											class="mdi mdi-logout-variant"></i> 退出登录</a>
+									</li>
+								</ul>
+							</li>
+							<!--切换主题配色-->
+							<li class="dropdown dropdown-skin">
+                     <span data-toggle="dropdown" class="icon-palette"><i
+							 class="mdi mdi-palette"></i></span>
+								<ul class="dropdown-menu dropdown-menu-right"
+									data-stopPropagation="true">
+									<li class="drop-title"><p>主题</p></li>
+									<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="site_theme" value="default" id="site_theme_1">
+                    <label for="site_theme_1"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="site_theme" value="dark" id="site_theme_2" checked>
+                    <label for="site_theme_2"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="site_theme" value="translucent" id="site_theme_3">
+                    <label for="site_theme_3"></label>
+                  </span>
+									</li>
+									<li class="drop-title"><p>LOGO</p></li>
+									<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="logo_bg" value="default" id="logo_bg_1" checked>
+                    <label for="logo_bg_1"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="logo_bg" value="color_2" id="logo_bg_2">
+                    <label for="logo_bg_2"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="logo_bg" value="color_3" id="logo_bg_3">
+                    <label for="logo_bg_3"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="logo_bg" value="color_4" id="logo_bg_4">
+                    <label for="logo_bg_4"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="logo_bg" value="color_5" id="logo_bg_5">
+                    <label for="logo_bg_5"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="logo_bg" value="color_6" id="logo_bg_6">
+                    <label for="logo_bg_6"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="logo_bg" value="color_7" id="logo_bg_7">
+                    <label for="logo_bg_7"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="logo_bg" value="color_8" id="logo_bg_8">
+                    <label for="logo_bg_8"></label>
+                  </span>
+									</li>
+									<li class="drop-title"><p>头部</p></li>
+									<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="header_bg" value="default" id="header_bg_1" checked>
+                    <label for="header_bg_1"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="header_bg" value="color_2" id="header_bg_2">
+                    <label for="header_bg_2"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="header_bg" value="color_3" id="header_bg_3">
+                    <label for="header_bg_3"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="header_bg" value="color_4" id="header_bg_4">
+                    <label for="header_bg_4"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="header_bg" value="color_5" id="header_bg_5">
+                    <label for="header_bg_5"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="header_bg" value="color_6" id="header_bg_6">
+                    <label for="header_bg_6"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="header_bg" value="color_7" id="header_bg_7">
+                    <label for="header_bg_7"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="header_bg" value="color_8" id="header_bg_8">
+                    <label for="header_bg_8"></label>
+                  </span>
+									</li>
+									<li class="drop-title"><p>侧边栏</p></li>
+									<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="sidebar_bg" value="default" id="sidebar_bg_1" checked>
+                    <label for="sidebar_bg_1"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="sidebar_bg" value="color_2" id="sidebar_bg_2">
+                    <label for="sidebar_bg_2"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="sidebar_bg" value="color_3" id="sidebar_bg_3">
+                    <label for="sidebar_bg_3"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="sidebar_bg" value="color_4" id="sidebar_bg_4">
+                    <label for="sidebar_bg_4"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="sidebar_bg" value="color_5" id="sidebar_bg_5">
+                    <label for="sidebar_bg_5"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="sidebar_bg" value="color_6" id="sidebar_bg_6">
+                    <label for="sidebar_bg_6"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="sidebar_bg" value="color_7" id="sidebar_bg_7">
+                    <label for="sidebar_bg_7"></label>
+                  </span>
+										<span>
+                    <input type="radio" name="sidebar_bg" value="color_8" id="sidebar_bg_8">
+                    <label for="sidebar_bg_8"></label>
+                  </span>
+									</li>
+								</ul>
+							</li>
+							<!--切换主题配色-->
+						</ul>
+
+					</div>
+				</nav>
+
+			</header>
+			<!--End 头部信息-->
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="../static/js/jquery.min.js"
+		th:src="@{~/static/js/jquery.min.js}"></script>
+<script type="text/javascript" src="../static/js/bootstrap.min.js"
+		th:src="@{~/static/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="../static/js/perfect-scrollbar.min.js"
+		th:src="@{~/static/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" src="../static/js/main.min.js"
+		th:src="@{~/static/js/main.min.js}"></script>
+<!--图表插件-->
+<script type="text/javascript" src="../static/js/Chart.js"></script>
+<script type="text/javascript">
+
+    $(".lyear-layout-sidebar-scroll li").click(function () {
+        //动态改变li的样式,点击添加样式
+        document.querySelector("")
+        //li标签的内容
+        var title = $(this).text();
+    });
+
+    //iframe
+    $(document).ready(function () {
+        var frame = document.getElementById("#teachers");
+        var classname = document.getElementsByClassName(".nav-drawer").children;
+        console.log(classname + "hahaha")
+    })
+
+    //页面加载时调用函数
+    $(document).ready(function () {
+        console.log("方法调用成功")
+        //发送请求到对应请求路径
+        $('#teacherList').load("[[@{/teacher/teacherAll/}]]");
+        console.log("方法调用成功********")
+    })
+
+    $(document).ready(function (e) {
+        var $dashChartBarsCnt = jQuery('.js-chartjs-bars')[0].getContext('2d'),
+            $dashChartLinesCnt = jQuery('.js-chartjs-lines')[0].getContext('2d');
+
+        var $dashChartBarsData = {
+            labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            datasets: [
+                {
+                    label: '注册用户',
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0)',
+                    backgroundColor: 'rgba(51,202,185,0.5)',
+                    hoverBackgroundColor: "rgba(51,202,185,0.7)",
+                    hoverBorderColor: "rgba(0,0,0,0)",
+                    data: [2500, 1500, 1200, 3200, 4800, 3500, 1500]
+                }
+            ]
+        };
+        var $dashChartLinesData = {
+            labels: ['2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012',
+                '2013', '2014'],
+            datasets: [
+                {
+                    label: '交易资金',
+                    data: [20, 25, 40, 30, 45, 40, 55, 40, 48, 40, 42, 50],
+                    borderColor: '#358ed7',
+                    backgroundColor: 'rgba(53, 142, 215, 0.175)',
+                    borderWidth: 1,
+                    fill: false,
+                    lineTension: 0.5
+                }
+            ]
+        };
+
+        new Chart($dashChartBarsCnt, {
+            type: 'bar',
+            data: $dashChartBarsData
+        });
+
+        var myLineChart = new Chart($dashChartLinesCnt, {
+            type: 'line',
+            data: $dashChartLinesData,
+        });
+    });
+</script>
+</body>
+</html>

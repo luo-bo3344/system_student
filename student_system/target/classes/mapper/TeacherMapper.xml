@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lb.mapper.TeacherMapper">
+    <resultMap id="teacher" type="com.lb.entity.Teacher">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+        <result column="birthday" property="birthday"/>
+        <result column="address" property="address"/>
+        <result column="phone" property="phone"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="relationship" property="relationship"/>
+    </resultMap>
+    <!--sql片段-->
+    <sql id="Teacher_List">
+		id,username,password,name,age,sex,birthday,address,phone,create_time,update_time,status,relationship
+	</sql>
+
+    <!--分页查询操作-->
+    <select id="queryTeacherAll" resultMap="teacher">
+        select
+        <include refid="Teacher_List"></include>
+        from user where status=1 and relationship=2
+    </select>
+
+    <!--查询单个教师信息用于修改-->
+    <select id="queryTeacherById" parameterType="java.lang.Integer" resultMap="teacher">
+		select * from user where status=1 and id=#{id}
+	</select>
+
+    <!--修改教师信息-->
+    <update id="updateTeacherById" parameterType="com.lb.entity.Teacher">
+        update user
+        set
+        <if test="username!=null and username!=''">
+            username=#{username},
+        </if>
+        <if test="password!=null and password!=''">
+            password=#{password},
+        </if>
+        <if test="name!=null and name!=''">
+            name=#{name},
+        </if>
+        <if test="age!=null and age!=''">
+            age=#{age},
+        </if>
+        <if test="sex!=null and sex!=''">
+            sex=#{sex},
+        </if>
+        <if test="null!=birthday">
+            birthday=#{birthday},
+        </if>
+        <if test="address!=null and address!=''">
+            address=#{address},
+        </if>
+        <if test="phone!=null and phone!=''">
+            phone=#{phone},
+        </if>
+        <if test="null!=updateTime">
+            update_time=#{updateTime}
+        </if>
+        where id=#{id}
+    </update>
+
+    <!--增加教师信息-->
+    <insert id="insertTeacher" parameterType="Teacher" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into user(username,password,name,age,sex,birthday,address,phone,create_time,relationship)
+		values(username=#{username},password=#{password},name=#{name},age=#{age},sex=#{sex},birthday=#{birthday},address=#{address},phone=#{phone},create_time=#{createTime},relationship=#{relationship})
+	</insert>
+
+    <!--模糊查询教师信息-->
+    <select id="queryTeacherByCondition" resultMap="teacher" parameterType="java.lang.String">
+        select
+        <include refid="Teacher_List"></include>
+        from user where status=1 and relationship=2
+        and name like CONCAT('%',#{str},'%')
+    </select>
+    <!--查询所有老师总数-->
+    <select id="queryCountAllTeacher" resultType="java.lang.Integer">
+         SELECT count(*) as total FROM user WHERE `status`=1 and relationship=2
+    </select>
+
+</mapper>

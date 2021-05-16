@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lb.mapper.AttendanceMapper">
+    <resultMap id="attendance" type="com.lb.entity.Attendance">
+        <id column="id" property="id"></id>
+        <result column="student_id" property="studentId"></result>
+        <result column="description" property="description"></result>
+        <result column="attendance_date" property="attendanceDate"></result>
+        <result column="status" property="status"></result>
+        <association property="user" javaType="com.lb.entity.User">
+            <id column="id" property="id"></id>
+            <result column="name" property="name"></result>
+        </association>
+        <association property="studentClass" javaType="com.lb.entity.StudentClass">
+            <id column="id" property="id"></id>
+            <result column="class_name" property="className"></result>
+        </association>
+    </resultMap>
+    <!--查询学生考勤列表-->
+    <select id="queryAllAttendance" resultMap="attendance">
+        SELECT a.id,a.student_id,a.description,a.attendance_date ,u.name FROM attendance a
+        LEFT JOIN user u on a.student_id=u.id
+        WHERE a.`status`=1 and u.`status`=1
+    </select>
+
+    <select id="queryAttendanceByClassName" parameterType="java.lang.String" resultMap="attendance">
+    select a.id,a.student_id,a.description,a.attendance_date,u.`name`,sc.class_name FROM attendance a
+       LEFT JOIN t_attendance_class ac on a.id=ac.attendance_id
+       LEFT JOIN student_class sc on sc.id=ac.class_id
+       LEFT JOIN user u on a.student_id=u.id
+       WHERE a.`status`=1 and sc.`status`=1 and u.`status`=1 and u.relationship=3 and sc.class_name=#{className}
+    </select>
+
+    <!--模糊查询考勤信息-->
+    <select id="queryAttendanceByStuName" resultMap="attendance" parameterType="java.lang.String">
+        SELECT a.id,a.student_id,a.description,a.attendance_date ,u.name FROM attendance a
+        LEFT JOIN user u on a.student_id=u.id
+        WHERE a.`status`=1 and u.`status`=1 and u.relationship=3 and u.name like CONCAT('%',#{name},'%')
+    </select>
+</mapper>

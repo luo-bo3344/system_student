@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>学生信息添加</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/bootstrap.min.css" th:href="@{~/static/css/bootstrap.min.css}"
+		  rel="stylesheet">
+	<link href="../static/css/materialdesignicons.min.css"
+		  th:href="@{~/static/css/materialdesignicons.min.css}" rel="stylesheet">
+	<link href="../static/css/style.min.css" th:href="@{~/static/css/style.min.css}"
+		  rel="stylesheet">
+	<!--时间选择插件-->
+	<link rel="stylesheet"
+		  th:href="@{~/static/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}">
+	<link rel="stylesheet"
+		  th:href="@{~/static/js/bootstrap-datepicker/bootstrap-datepicker3.min.css}">
+</head>
+<body>
+<div class="lyear-layout-web">
+	<div class="lyear-layout-container">
+		<div th:replace="common/commons :: commonMenu(2)">
+		</div>
+		<main class="lyear-layout-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header"><h3>添加学生信息</h3></div>
+							<div class="card-body">
+								<form name="addStudent" class="form-horizontal" th:action="@{/student/insertStudent}"
+									  method="post" onsubmit="return checkAddStudent()">
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="username">用户名</label>
+										<div class="col-md-7">
+											<input class="form-control" id="username"
+												   placeholder="请输入用户名.." name="username">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="password">密码</label>
+										<div class="col-md-7">
+											<input class="form-control" type="password" id="password"
+												   name="password" placeholder="请输入密码..">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="name">姓名</label>
+										<div class="col-md-7">
+											<input class="form-control" type="text" id="name"
+												   name="name" placeholder="请输入姓名..">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="className">所属班级</label>
+										<div class="col-md-7">
+											<input class="form-control" id="className" type="text" name="className"
+												   list="classNameList" placeholder="请输入或选择班级名字..">
+											<datalist class="form-control" name="className" id="classNameList"
+													  style="display:none;">
+												<option th:each="name:${className}" th:value="${name}"></option>
+											</datalist>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="age">年龄</label>
+										<div class="col-md-7">
+											<input class="form-control" type="text" id="age"
+												   name="age" placeholder="请输入年龄..">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="sex">性别</label>
+										<div class="col-md-7">
+											<input class="form-control" id="sex" type="text" name="sex"
+												   list="sexList" placeholder="请选择性别..">
+											<datalist class="form-control" id="sexList"
+													  style="display:none;" name="sex">
+												<option th:value="男">男</option>
+												<option th:value="女">女</option>
+											</datalist>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="birthday">出生日期</label>
+										<div class="col-md-7">
+											<input class="form-control js-datepicker m-b-10" type="text"
+												   id="birthday" name="birthday"
+												   placeholder="日期格式：yyyy-mm-dd"
+												   data-date-format="yyyy-mm-dd"/>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="address">家庭住址</label>
+										<div class="col-md-7">
+											<input class="form-control" type="text" id="address"
+												   name="address" placeholder="请输入家庭住址..">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"
+											   for="phone">家长联系电话</label>
+										<div class="col-md-7">
+											<input class="form-control" type="text" id="phone"
+												   name="phone" placeholder="请输入联系电话..">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-9 col-md-offset-3">
+											<button class="btn btn-primary" type="submit">添加学生</button>
+											<a class="btn bg-success" th:href="@{/student/returnToList}">返回学生列表</a>
+										</div>
+									</div>
+								</form>
+								<span class="alert-danger" th:text="${NotFound}"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{~/static/js/main.min.js}"></script>
+<script type="text/javascript" th:src="@{~/static/js/jquery-3.1.1.js}"></script>
+<script th:ononline="javascript">
+    function checkAddStudent() {
+        /*判断用户名是否为空*/
+        var name = document.getElementById("username").value;
+        console.log(name);
+        if (name == null || name == '') {
+            alert("用户名不能为空");
+            //updateTeacher.username.focus();
+            return false;
+        }
+        className
+
+        /*判断用户名是否为空*/
+        var className = document.getElementById("className").value;
+        console.log(className);
+        if (className == null || className == '') {
+            alert("所属班级不能为空！请选择");
+            return false;
+        }
+
+        /*判断日期格式是否正确*/
+        var str = $("#birthday").val();
+        var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
+        var arr = reg.exec(str);
+        if (!reg.test(str) || RegExp.$2 > 12 || RegExp.$3 > 31) {
+            alert("请保证输入的日期格式为2019-01-01类型的正确日期!");
+            return false;
+        }
+
+        //判断电话号码格式是否正确
+        //var phone = document.getElementById("phone").value;
+        var phone = $("#phone").val();
+        var phoneCompare = /^1[3|5|7|8][0-9]\d{8}$/
+        console.log(phone + "phone" + phone.length);
+        if (!phoneCompare.test(phone)) {
+            alert("电话号码格式错误,请重新输入");
+            return false;
+        }
+        /*
+				var addSuccess = [[${addSuccess}]];
+				console.log("添加是否成功="+addSuccess)
+				if (addSuccess>0){
+					alert("添加成功")
+					return true;
+				}*/
+    }
+
+</script>
+</html>

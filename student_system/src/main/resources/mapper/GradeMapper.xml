@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lb.mapper.GradeMapper">
+    <resultMap id="gradeAll" type="com.lb.entity.Grade">
+        <id column="id" property="id"></id>
+        <result column="student_id" property="studentId"></result>
+        <result column="course_id" property="courseId"></result>
+        <result column="class_id" property="classId"></result>
+        <result column="grade" property="grade"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="status" property="status"></result>
+      <!--  <association property="user" javaType="com.lb.entity.User">
+            <id column="id" property="id"></id>
+            <result column="name" property="name"></result>
+        </association>
+        <association property="course" javaType="com.lb.entity.Course">
+            <id column="id" property="id"></id>
+            <result column="course_name" property="courseName"></result>
+        </association>-->
+    </resultMap>
+    <select id="queryStudentGradeByStudentName" parameterType="java.lang.String" resultMap="gradeAll">
+        SELECT * FROM grade g INNER JOIN user u on g.student_id=u.id
+        WHERE g.`status`=1 and  u.`status`=1 and u.relationship=3 and u.`name`=#{studentName}
+    </select>
+</mapper>
